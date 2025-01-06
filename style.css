@@ -20,12 +20,12 @@ body {
   
   .display {
     width: 93%;
-    height: 50px;
+    height: 40px;
     font-size: 2em;
     border: none;
     background-color: #222;
-    /* color: #fff; */
-    color: red;
+    color: #fff;
+    /* color: red; */
     border-radius: 10px;
     margin-bottom: 20px;
     padding: 10px;

@@ -12,15 +12,42 @@
 <!-- php file  -->
 <?php
 
+session_start();
+
+if (!isset($_SESSION["current"])) {
+    $_SESSION["current"] = "";
+}
+
+if (!isset($_SESSION["result"])) {
+    $_SESSION["result"] = 0;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['number'])) {
-        $number = $_POST['number'];
+
+    $input = $_POST['number'];
+
+    if ($input === 'c') {
+        $_SESSION['current'] = '';
+        $_SESSION['result'] = 0;
+    } else if ($input === '=') {
+
+        if ($_SESSION['current'][0] === "/" || $_SESSION['current'][0] === "*" || substr($_SESSION['current'], -1) === "+" || substr($_SESSION['current'], -1) === "-" || substr($_SESSION['current'], -1) === "*" || substr($_SESSION['current'], -1) === "/") {
+            $_SESSION['current'] = ' ';
+        } else {
+            try {
+                $_SESSION['result'] = eval ('return ' . $_SESSION['current'] . ';');
+                $_SESSION['current'] = $_SESSION['result'];
+            } catch (Exception $e) {
+                $_SESSION['current'] = ' ';
+            }
+        }
+
+    } else {
+        $_SESSION["current"] .= $input;
     }
 }
 
 ?>
-
-
 
 <div class="container">
     <main>
@@ -28,7 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="calculator">
             <h2>---- Smart calcu ----</h2>
             <div class="display display_area">
-                <?php echo $number; ?>
+                <?php
+                echo !empty($_SESSION['current']) ? $_SESSION['current'] : '0';
+                ?>
                 <!-- <input type="text" id="display" class="display" disabled> -->
             </div>
             <div>
